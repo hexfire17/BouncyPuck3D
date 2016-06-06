@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
 		} 
 		else if (Input.GetMouseButtonUp (0))
 		{
-			//Destroy (_aimParticles.gameObject);
+			Destroy (_aimParticles.gameObject);
 			_isAiming = false;
 
 			_aimDirection = _puck.transform.position - GetMousePosition ();
@@ -28,10 +28,11 @@ public class Player : MonoBehaviour
 		}
 		else if (_isAiming) {
 			if (_aimParticles == null) {
-				_aimParticles = Instantiate (_aimParticlePrefab, GetMousePosition (), _aimParticlePrefab.transform.rotation) as ParticleSystem;
+				Vector3 aimParticlePosition = GetMousePosition () + Vector3.back; // raise above stuff
+				_aimParticles = Instantiate (_aimParticlePrefab, aimParticlePosition, _aimParticlePrefab.transform.rotation) as ParticleSystem;
 			}
 				
-			_aimParticles.transform.LookAt (2 * _aimParticles.transform.position - GetMousePosition ());
+			_aimParticles.transform.LookAt (2 * _aimParticles.transform.position - GetMousePosition () - Vector3.back);
 			_aimDirection = _puck.transform.position - GetMousePosition ();
 		}
 	}
