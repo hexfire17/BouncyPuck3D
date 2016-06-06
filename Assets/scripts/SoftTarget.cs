@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
 
 public class SoftTarget : MonoBehaviour, IHitable
 {
@@ -13,11 +12,19 @@ public class SoftTarget : MonoBehaviour, IHitable
 	{
 		Debug.Log ("Destroy soft");
 		Destroy (gameObject);
-		ParticleSystem deathEffect = Instantiate (_deathEffect, transform.position, transform.rotation) as ParticleSystem;
+		SpawnDeathEffect ();
+	}
 
-		// TODO why does this work... but shape.box = doesn't...?
+	private void SpawnDeathEffect ()
+	{
+		ParticleSystem deathEffect = Instantiate (_deathEffect, transform.position, transform.rotation) as ParticleSystem;
 		ParticleSystem.ShapeModule shape = deathEffect.shape;
 		shape.box = transform.localScale;
+
+		ParticleSystem.EmissionModule emission = deathEffect.emission;
+		ParticleSystem.MinMaxCurve rate = emission.rate;
+		rate.constantMax = 1000 * (transform.localScale.x + transform.localScale.y + transform.localScale.z);
+		emission.rate = rate;
 	}
 
 	public ParticleSystem _deathEffect;
