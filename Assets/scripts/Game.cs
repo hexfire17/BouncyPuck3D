@@ -6,8 +6,7 @@ public class Game : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		_levelGenerator = FindObjectOfType<LevelGenerator> ();
-		_levelGenerator._levelIndex = 0;
+		_currLevel = -1;
 		NextLevel ();
 	}
 	
@@ -21,9 +20,11 @@ public class Game : MonoBehaviour
 
 	void NextLevel ()
 	{
-		_levelGenerator.GenerateLevel ();
-		_levelGenerator._levelIndex++;
+		_currLevel++;
+		OnLoadLevel (_currLevel);
 	}
 
 	LevelGenerator _levelGenerator;
+	public event System.Action<int> OnLoadLevel;
+	private int _currLevel;
 }

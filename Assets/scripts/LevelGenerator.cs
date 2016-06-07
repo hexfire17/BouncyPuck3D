@@ -7,18 +7,19 @@ public class LevelGenerator : MonoBehaviour
 	public void Awake()
 	{
 		Debug.Log ("Level Generator Started");
+		FindObjectOfType<Game> ().OnLoadLevel += GenerateLevel;
 	}
 
-	public void GenerateLevel()
+	public void GenerateLevel(int levelIndex)
 	{
-		Debug.Log ("Generating level " + _levelIndex);
+		Debug.Log ("Generating level " + levelIndex);
 
 		if (transform.FindChild (_holderName))
 		{
 			DestroyImmediate(transform.FindChild(_holderName).gameObject);
 		}
 
-		_currentLevel = _levels [_levelIndex];
+		_currentLevel = _levels [levelIndex];
 		foreach (LevelObject o in _currentLevel._levelObjects)
 		{
 			
@@ -28,18 +29,18 @@ public class LevelGenerator : MonoBehaviour
 		}
 	}
 
-	public void NewSoftObject ()
+	public void NewSoftObject (int levelIndex)
 	{
 		Debug.Log ("New Soft Object");
-		_currentLevel = _levels [_levelIndex];
+		_currentLevel = _levels [levelIndex];
 		Transform softTarget = Instantiate (_softTargetPrefab, Vector3.zero, _softTargetPrefab.transform.rotation) as Transform;
 		softTarget.transform.parent = GetLevelHolder ();
 	}
 
-	public void SaveLevel ()
+	public void SaveLevel (int levelIndex)
 	{
-		Debug.Log ("Saving level " + _levelIndex);
-		_currentLevel = _levels [_levelIndex];
+		Debug.Log ("Saving level " + levelIndex);
+		_currentLevel = _levels [levelIndex];
 
 		_currentLevel._levelObjects = new List<LevelObject> ();
 		foreach(Transform child in GetLevelHolder ())
@@ -52,12 +53,6 @@ public class LevelGenerator : MonoBehaviour
 			Debug.Log ("Type: " + child.GetType ());
 			_currentLevel._levelObjects.Add (levelObject);
 		}
-	}
-		
-	void OnNextLevel(int levelIndex)
-	{
-		_levelIndex = levelIndex;
-		GenerateLevel ();
 	}
 
 	Transform GetLevelHolder ()
@@ -86,7 +81,6 @@ public class LevelGenerator : MonoBehaviour
 	}
 
 	public Level[] _levels;
-	public int _levelIndex;
 	Level _currentLevel;
 
 	Transform _levelHolder;

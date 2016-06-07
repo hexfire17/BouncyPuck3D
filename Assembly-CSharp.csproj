@@ -51,7 +51,6 @@
      <Compile Include="Assets\scripts\Particle.cs" />
      <Compile Include="Assets\scripts\Player.cs" />
      <Compile Include="Assets\scripts\Puck.cs" />
-     <Compile Include="Assets\scripts\PuckController.cs" />
      <Compile Include="Assets\scripts\SoftTarget.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

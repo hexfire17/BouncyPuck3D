@@ -3,17 +3,13 @@ using System.Collections;
 
 public class Puck : MonoBehaviour 
 {
+	//TODO tail just like bullets
 	void Start ()
 	{
 		_rigidBody = GetComponent<Rigidbody> ();
 		Vector3 fixedPosition = transform.position;
 		fixedPosition.z = -0.6248822f;
 		transform.position = fixedPosition;
-	}
-
-	void FixedUpdate ()
-	{
-		//_trailParticles.transform.rotation
 	}
 
 	public void launch (Vector2 direction)
@@ -29,8 +25,6 @@ public class Puck : MonoBehaviour
 		{ 
 			hitableObject.OnPuckEnter ();
 		}
-		Debug.Log ("V: " + _rigidBody.velocity);
-
 	}
 
 	void OnCollisionExit (Collision c)
@@ -41,8 +35,6 @@ public class Puck : MonoBehaviour
 			hitableObject.OnPuckExit ();
 			Instantiate (_hitParticles, transform.position, transform.rotation);
 		}
-		Debug.Log ("V: " + _rigidBody.velocity);
-
 	}
 
 	public float _speed;
