@@ -18,12 +18,18 @@ public class Puck : MonoBehaviour
 		_rigidBody.AddForce (direction.normalized * _speed);
 	}
 
+	public void Destroy()
+	{
+		Debug.Log ("Destroy puck");
+		GameObject.Destroy (gameObject);
+	}
+
 	void OnCollisionEnter (Collision c)
 	{
 		IHitable hitableObject = c.gameObject.GetComponent<IHitable> ();
 		if (hitableObject != null)
 		{ 
-			hitableObject.OnPuckEnter ();
+			hitableObject.OnEnter (this); // TODO pass puck in
 		}
 	}
 
@@ -32,7 +38,7 @@ public class Puck : MonoBehaviour
 		IHitable hitableObject = c.gameObject.GetComponent<IHitable> ();
 		if (hitableObject != null)
 		{ 
-			hitableObject.OnPuckExit ();
+			hitableObject.OnExit (this);
 			Instantiate (_hitParticles, transform.position, transform.rotation);
 		}
 	}

@@ -46,12 +46,13 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\scripts\Game.cs" />
+     <Compile Include="Assets\scripts\Guardian.cs" />
      <Compile Include="Assets\scripts\IHitable.cs" />
      <Compile Include="Assets\scripts\LevelGenerator.cs" />
      <Compile Include="Assets\scripts\Particle.cs" />
      <Compile Include="Assets\scripts\Player.cs" />
      <Compile Include="Assets\scripts\Puck.cs" />
-     <Compile Include="Assets\scripts\SoftTarget.cs" />
+     <Compile Include="Assets\scripts\Target.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

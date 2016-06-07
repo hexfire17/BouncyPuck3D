@@ -3,6 +3,6 @@ using System.Collections;
 
 public interface IHitable
 {
-	void OnPuckEnter ();
-	void OnPuckExit ();
+	void OnEnter (Puck puck);
+	void OnExit (Puck puck);
 }

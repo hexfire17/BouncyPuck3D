@@ -3,6 +3,11 @@ using System.Collections;
 
 public class Game : MonoBehaviour
 {
+	void Awake ()
+	{
+		FindObjectOfType<LevelGenerator> ().OnLevelComplete += NextLevel;
+	}
+
 	// Use this for initialization
 	void Start () 
 	{

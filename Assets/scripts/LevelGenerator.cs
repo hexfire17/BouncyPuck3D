@@ -19,24 +19,21 @@ public class LevelGenerator : MonoBehaviour
 			DestroyImmediate(transform.FindChild(_holderName).gameObject);
 		}
 
+		_targetsRemaining = 0;
 		_currentLevel = _levels [levelIndex];
 		foreach (LevelObject o in _currentLevel._levelObjects)
 		{
-			
-			Transform target = Object.Instantiate (_softTargetPrefab, o._position, o._rotation) as Transform;
-			target.transform.localScale = o._scale;
-			target.parent = GetLevelHolder ();
+			Transform t = Object.Instantiate (o._prefab, o._position, o._rotation) as Transform;
+			t.transform.localScale = o._scale;
+			t.parent = GetLevelHolder ();
+
+			if (t.GetComponent<Target> () != null) {
+				_targetsRemaining++;
+				t.GetComponent<Target> ().OnDestroy += OnTargetDestroy;
+			}
 		}
 	}
-
-	public void NewSoftObject (int levelIndex)
-	{
-		Debug.Log ("New Soft Object");
-		_currentLevel = _levels [levelIndex];
-		Transform softTarget = Instantiate (_softTargetPrefab, Vector3.zero, _softTargetPrefab.transform.rotation) as Transform;
-		softTarget.transform.parent = GetLevelHolder ();
-	}
-
+		
 	public void SaveLevel (int levelIndex)
 	{
 		Debug.Log ("Saving level " + levelIndex);
@@ -49,20 +46,42 @@ public class LevelGenerator : MonoBehaviour
 			levelObject._position = child.position;
 			levelObject._scale = child.localScale;
 			levelObject._rotation = child.transform.rotation;
-			levelObject._transform = _softTargetPrefab;
-			Debug.Log ("Type: " + child.GetType ());
+			levelObject._prefab = GetPrefab (child.name);
 			_currentLevel._levelObjects.Add (levelObject);
 		}
 	}
 
-	Transform GetLevelHolder ()
+	private void OnTargetDestroy ()
 	{
+		_targetsRemaining--;
+		Debug.Log ("Targets Remaining: " + _targetsRemaining);
+		if (_targetsRemaining == 0) {
+			OnLevelComplete ();
+		}
+	}
+
+	public Transform GetLevelHolder ()
+	{
+		if (transform.FindChild (_holderName) != null) {
+			_levelHolder = transform.FindChild (_holderName);
+		}
 		if (_levelHolder == null) 
 		{
 			_levelHolder = new GameObject(_holderName).transform;
 			_levelHolder.parent = transform;
 		}
 		return _levelHolder;
+	}
+
+	public Transform GetPrefab (string name)
+	{
+		for (int i = 0; i < _prefabMapping.Count; i++)
+		{
+			if (name.Contains (_prefabMapping.ToArray () [i]._name)) {
+				return _prefabMapping.ToArray () [i]._prefab;
+			}
+		}
+		return null;
 	}
 		
 	[System.Serializable]
@@ -74,7 +93,7 @@ public class LevelGenerator : MonoBehaviour
 	[System.Serializable]
 	public class LevelObject
 	{
-		public Object _transform;
+		public Transform _prefab;
 		public Vector3 _position;
 		public Vector3 _scale;
 		public Quaternion _rotation;
@@ -86,5 +105,15 @@ public class LevelGenerator : MonoBehaviour
 	Transform _levelHolder;
 	const string _holderName = "LevelHolder";
 
-	public Transform _softTargetPrefab;
+	private int _targetsRemaining;
+
+	public event System.Action OnLevelComplete;
+
+	[System.Serializable]
+	public class PrefabMapping
+	{
+		public string _name;
+		public Transform _prefab;
+	}
+	public List<PrefabMapping> _prefabMapping;
 }
