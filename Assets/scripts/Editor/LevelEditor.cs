@@ -27,6 +27,7 @@ public class LevelEditor : Editor
 		base.OnInspectorGUI ();
 		if (GUILayout.Button("Load Level"))
 		{
+			DestroyImmediate(GetGenerator ().GetLevelHolder ().gameObject);
 			GetGenerator ().GenerateLevel (_levelIndex);
 		}
 

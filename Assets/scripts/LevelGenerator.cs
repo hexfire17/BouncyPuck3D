@@ -16,7 +16,7 @@ public class LevelGenerator : MonoBehaviour
 
 		if (transform.FindChild (_holderName))
 		{
-			DestroyImmediate(transform.FindChild(_holderName).gameObject);
+			Destroy(transform.FindChild(_holderName).gameObject);
 		}
 
 		_targetsRemaining = 0;
