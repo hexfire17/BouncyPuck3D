@@ -39,7 +39,7 @@ public class LevelGenerator : MonoBehaviour
 		_currentLevel = _levels [levelIndex];
 		foreach (LevelObject o in _currentLevel._levelObjects)
 		{
-			Transform t = Object.Instantiate (o._prefab, o._position, o._rotation) as Transform;
+			Transform t = Object.Instantiate (GetPrefab(o._prefabKey), o._position, o._rotation) as Transform;
 			t.transform.localScale = o._scale;
 			t.parent = GetLevelHolder ();
 
@@ -62,7 +62,7 @@ public class LevelGenerator : MonoBehaviour
 			levelObject._position = child.position;
 			levelObject._scale = child.localScale;
 			levelObject._rotation = child.transform.rotation;
-			levelObject._prefab = GetPrefab (child.name);
+			levelObject._prefabKey = GetPrefabKey (child.name);
 			_currentLevel._levelObjects.Add (levelObject);
 		}
 	}
@@ -90,6 +90,13 @@ public class LevelGenerator : MonoBehaviour
 		return _levelHolder;
 	}
 
+	public string GetPrefabKey (string name)
+	{
+		Transform prefab = GetPrefab (name);
+		if (prefab) {return prefab.name;}
+		return null;
+	}
+
 	public Transform GetPrefab (string name)
 	{
 		for (int i = 0; i < _prefabMapping.Count; i++)
@@ -110,7 +117,7 @@ public class LevelGenerator : MonoBehaviour
 	[System.Serializable]
 	public class LevelObject
 	{
-		public Transform _prefab;
+		public string _prefabKey;
 		public Vector3 _position;
 		public Vector3 _scale;
 		public Quaternion _rotation;
