@@ -11,12 +11,13 @@ public class Player : MonoBehaviour
 	
 	void Update ()
 	{
-		if (Input.GetMouseButtonDown (0)) 
+		if (Input.GetMouseButtonDown (0))
 		{
-			if (_puck != null) { Destroy (_puck.gameObject); }
+			if (_puck != null) { _puck.Destroy (); }
 			_isAiming = true;
 
-			_puck = Instantiate (_puckPrefab,  GetMousePosition (), _puckPrefab.transform.rotation) as Puck; 
+			_puck = Instantiate (_puckPrefab,  GetMousePosition (), _puckPrefab.transform.rotation) as Puck;
+			_puck.OnPuckDestroy += OnEndTurn;
 		} 
 		else if (Input.GetMouseButtonUp (0))
 		{
@@ -50,6 +51,7 @@ public class Player : MonoBehaviour
 
 	public Puck _puckPrefab;
 	public ParticleSystem _aimParticlePrefab;
+	public event System.Action OnEndTurn;
 
 	Puck _puck;
 	Camera _camera;

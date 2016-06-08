@@ -8,6 +8,8 @@ public class LevelEditor : Editor
 {
 	public override void OnInspectorGUI()
 	{
+		base.OnInspectorGUI ();
+
 		Object[] objs = Resources.LoadAll ("LevelPrefabs", typeof (GameObject));
 		_prefabs = new Transform[objs.Length];
 		for (int i = 0; i < objs.Length; i++) {
@@ -24,11 +26,9 @@ public class LevelEditor : Editor
 		}
 		GUILayout.EndHorizontal ();
 
-		base.OnInspectorGUI ();
 		if (GUILayout.Button("Load Level"))
 		{
-			DestroyImmediate(GetGenerator ().GetLevelHolder ().gameObject);
-			GetGenerator ().GenerateLevel (_levelIndex);
+			GetGenerator ().GenerateLevel (_levelIndex, true);
 		}
 
 		if (GUILayout.Button ("Save Level"))
@@ -39,13 +39,13 @@ public class LevelEditor : Editor
 		if (GUILayout.Button ("Next Level"))
 		{
 			_levelIndex++;
-			GetGenerator ().GenerateLevel (_levelIndex);
+			GetGenerator ().GenerateLevel (_levelIndex, true);
 		}
 
 		if (GUILayout.Button ("Prev Level"))
 		{
 			_levelIndex--;
-			GetGenerator ().GenerateLevel (_levelIndex);
+			GetGenerator ().GenerateLevel (_levelIndex, true);
 		}
 	}
 

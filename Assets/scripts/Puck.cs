@@ -22,6 +22,7 @@ public class Puck : MonoBehaviour
 	{
 		Debug.Log ("Destroy puck");
 		GameObject.Destroy (gameObject);
+		OnPuckDestroy ();
 	}
 
 	void OnCollisionEnter (Collision c)
@@ -45,6 +46,7 @@ public class Puck : MonoBehaviour
 
 	public float _speed;
 	public ParticleSystem _hitParticles;
+	public event System.Action OnPuckDestroy;
 
 	Rigidbody _rigidBody;
 }

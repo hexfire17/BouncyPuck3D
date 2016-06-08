@@ -8,16 +8,32 @@ public class LevelGenerator : MonoBehaviour
 	{
 		Debug.Log ("Level Generator Started");
 		FindObjectOfType<Game> ().OnLoadLevel += GenerateLevel;
+		DestroyLevelHolder (false);
+	}
+
+	public void DestroyLevelHolder (bool isLevelEditor)
+	{
+		Transform holder = transform.FindChild (_holderName);
+		if (holder) {
+			if (isLevelEditor) {
+				DestroyImmediate (holder.gameObject);
+			}
+			else
+			{
+				foreach (Transform child in holder){Destroy (child.gameObject);};
+			}
+		}
 	}
 
 	public void GenerateLevel(int levelIndex)
 	{
-		Debug.Log ("Generating level " + levelIndex);
+		GenerateLevel (levelIndex, false);
+	}
 
-		if (transform.FindChild (_holderName))
-		{
-			Destroy(transform.FindChild(_holderName).gameObject);
-		}
+	public void GenerateLevel(int levelIndex, bool isLevelEditor)
+	{
+		Debug.Log ("Generating level " + levelIndex);
+		DestroyLevelHolder (isLevelEditor);
 
 		_targetsRemaining = 0;
 		_currentLevel = _levels [levelIndex];
@@ -62,6 +78,7 @@ public class LevelGenerator : MonoBehaviour
 
 	public Transform GetLevelHolder ()
 	{
+		Debug.Log ("Holder: " + transform.FindChild (_holderName));
 		if (transform.FindChild (_holderName) != null) {
 			_levelHolder = transform.FindChild (_holderName);
 		}

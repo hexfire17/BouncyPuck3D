@@ -6,6 +6,7 @@ public class Game : MonoBehaviour
 	void Awake ()
 	{
 		FindObjectOfType<LevelGenerator> ().OnLevelComplete += NextLevel;
+		FindObjectOfType<Player> ().OnEndTurn += RestartLevel; //TODO change ecvents to be names and acting methods to be actions
 	}
 
 	// Use this for initialization
@@ -21,6 +22,11 @@ public class Game : MonoBehaviour
 		if (Input.GetKeyDown (KeyCode.Return)) {
 			NextLevel ();
 		}
+	}
+
+	void RestartLevel ()
+	{
+		OnLoadLevel (_currLevel);
 	}
 
 	void NextLevel ()
